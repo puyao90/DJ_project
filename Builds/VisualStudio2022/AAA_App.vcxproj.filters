@@ -586,6 +586,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\DeckGUI.cpp">
+      <Filter>AAA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\DJAudioPlayer.cpp">
+      <Filter>AAA\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Main.cpp">
       <Filter>AAA\Source</Filter>
     </ClCompile>
@@ -2991,6 +2997,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\DeckGUI.h">
+      <Filter>AAA\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\DJAudioPlayer.h">
+      <Filter>AAA\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\MainComponent.h">
       <Filter>AAA\Source</Filter>
     </ClInclude>
