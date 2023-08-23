@@ -21,6 +21,9 @@ MainComponent::MainComponent()
     }
     addAndMakeVisible(deckGUI1);
     addAndMakeVisible(deckGUI2);
+    addAndMakeVisible(playlistComponent);
+    
+    formatManager.registerBasicFormats();
 }
 
 MainComponent::~MainComponent()
@@ -32,16 +35,23 @@ MainComponent::~MainComponent()
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
     player1.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    
+    mixerSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    mixerSource.addInputSource(&player1, false);
+    mixerSource.addInputSource(&player2, false);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    player1.getNextAudioBlock(bufferToFill);
+    mixerSource.getNextAudioBlock(bufferToFill);
 }
 
 void MainComponent::releaseResources()
 {
     player1.releaseResources();
+    player2.releaseResources();
+    mixerSource.releaseResources();
 }
 
 //==============================================================================
@@ -54,38 +64,10 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    deckGUI1.setBounds(0,0,getWidth()/2,getHeight());
-    deckGUI2.setBounds(getWidth()/2,0,getWidth()/2,getHeight());
+    deckGUI1.setBounds(0,0,getWidth()/2,getHeight()/2);
+    deckGUI2.setBounds(getWidth()/2,0,getWidth()/2,getHeight()/2);
+    
+    playlistComponent.setBounds(0,getHeight()/2,getWidth(),getHeight()/2);
 }
 
 std::unique_ptr<juce::FileChooser> myChooser;
-
-
-void MainComponent::buttonClicked(juce::Button* button){
-//    if(button==&playButton){
-//        player1.start();
-//    }
-//    if(button==&stopButton){
-//        player1.stop();
-//    }
-//    if(button==&loadButton){
-//        auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles;
-//        fChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
-//            {
-//                juce::File chosenFile = chooser.getResult();
-//                player1.loadURL(juce::URL{chosenFile});
-//            });
-//    }
-}
-
-void MainComponent::sliderValueChanged (juce::Slider* slider){
-//    if(slider==&volSlider){
-//        player1.setGain(slider->getValue());
-//    }
-//    if(slider==&speedSlider){
-//        player1.setSpeed(slider->getValue());
-//    }
-//    if(slider==&posSlider){
-//        player1.setPositionRelative(slider->getValue());
-//    }
-}
