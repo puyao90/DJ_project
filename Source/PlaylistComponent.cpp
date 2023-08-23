@@ -14,17 +14,11 @@
 //==============================================================================
 PlaylistComponent::PlaylistComponent()
 {
-//    trackTitles.push_back("Track 1");
-//    trackTitles.push_back("Track 2");
-//    trackTitles.push_back("Track 3");
-//    trackTitles.push_back("Track 4");
-//    trackTitles.push_back("Track 5");
-//    trackTitles.push_back("Track 6");
-    
     addAndMakeVisible(loadButton);
-    
-    tableComponent.getHeader().addColumn("Track title", 1, 400);
-    tableComponent.getHeader().addColumn("", 2, 200);
+    tableComponent.getHeader().addColumn("", 1, 40);
+    tableComponent.getHeader().addColumn("", 2, 40);
+    tableComponent.getHeader().addColumn("Track title", 3, 640);
+    tableComponent.getHeader().addColumn("", 4, 60);
     tableComponent.setModel(this);
     
     addAndMakeVisible(tableComponent);
@@ -71,10 +65,28 @@ void PlaylistComponent::paintCell (juce::Graphics & g, int rowNumber, int column
 }
 
 juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, Component *existingComponentToUpdate){
+    if(columnId==1){
+        if(existingComponentToUpdate==nullptr){
+            juce::TextButton* btn=new juce::TextButton{"L"};
+            juce::String id{"L"+std::to_string(rowNumber)};
+            btn->setComponentID(id);
+            btn->addListener(this);
+            existingComponentToUpdate=btn;
+        }
+    }
     if(columnId==2){
         if(existingComponentToUpdate==nullptr){
-            juce::TextButton* btn=new juce::TextButton{"play"};
-            juce::String id{std::to_string(rowNumber)};
+            juce::TextButton* btn=new juce::TextButton{"R"};
+            juce::String id{"R"+std::to_string(rowNumber)};
+            btn->setComponentID(id);
+            btn->addListener(this);
+            existingComponentToUpdate=btn;
+        }
+    }
+    if(columnId==4){
+        if(existingComponentToUpdate==nullptr){
+            juce::TextButton* btn=new juce::TextButton{"delete"};
+            juce::String id{"delete"+std::to_string(rowNumber)};
             btn->setComponentID(id);
             btn->addListener(this);
             existingComponentToUpdate=btn;
@@ -85,16 +97,24 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
 
 void PlaylistComponent::buttonClicked (juce::Button* button){
     if(button==&loadButton){
-        auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles;
+        auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles|juce::FileBrowserComponent::openMode;
         fChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
             {
-                juce::File chosenFile = chooser.getResult();
-//            player->loadURL(juce::URL{chosenFile});
-//            waveformdisplay.loadURL(juce::URL{chosenFile});
+            juce::Array<juce::File> files = chooser.getResults();
+            for (const auto& file : files){
+                selectedFiles.push_back(file);
+                trackTitles.push_back(file.getFileName().toStdString()); }
+            tableComponent.updateContent();
             });
+    }else{
+        juce::String buttonID = button->getComponentID();
+               if (buttonID.startsWith("delete"))
+               {
+                   int rowNumber = buttonID.substring(6).getIntValue(); // Remove "delete" prefix
+                   trackTitles.erase(trackTitles.begin() + rowNumber);
+                   tableComponent.updateContent();
+               }
     }
-    int rowNumber = button->getComponentID().getIntValue();
-        std::cout << "PlaylistComponent::buttonClicked:" << trackTitles[rowNumber] << std::endl;
 }
 
 

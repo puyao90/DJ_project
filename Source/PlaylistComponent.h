@@ -37,6 +37,7 @@ private:
     juce::TextButton loadButton{"Load to Playlist"};
     juce::TableListBox tableComponent;
     std::vector<std::string> trackTitles;
+    std::vector<juce::File> selectedFiles;
     
     juce::FileChooser fChooser{"Select a file..."};
     
