@@ -586,9 +586,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\CustomTableHeaderComponent.cpp">
-      <Filter>AAA\Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\PlaylistComponent.cpp">
       <Filter>AAA\Source</Filter>
     </ClCompile>
@@ -3006,6 +3003,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\RowComponent.h">
+      <Filter>AAA\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\PlaylistComponent.h">
       <Filter>AAA\Source</Filter>
     </ClInclude>

@@ -4,8 +4,7 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="joNRCH" name="AAA">
     <GROUP id="{07A95BC1-3364-46E7-C003-731ECB4365B7}" name="Source">
-      <FILE id="gtUehJ" name="CustomTableHeaderComponent.cpp" compile="1"
-            resource="0" file="Source/CustomTableHeaderComponent.cpp"/>
+      <FILE id="BTLIqd" name="RowComponent.h" compile="0" resource="0" file="Source/RowComponent.h"/>
       <FILE id="OoUPKZ" name="PlaylistComponent.cpp" compile="1" resource="0"
             file="Source/PlaylistComponent.cpp"/>
       <FILE id="sMZuZw" name="PlaylistComponent.h" compile="0" resource="0"

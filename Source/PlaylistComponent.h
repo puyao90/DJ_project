@@ -11,7 +11,7 @@
 #pragma once
 #include "DeckGUI.h"
 #include <JuceHeader.h>
-
+#include "RowComponent.h"
 //==============================================================================
 /*
 */
@@ -38,6 +38,7 @@ private:
     juce::TableListBox tableComponent;
     std::vector<std::string> trackTitles;
     std::vector<juce::File> loadedFiles;
+    std::vector<RowComponent> rows;
     DeckGUI* leftGui;
     DeckGUI* rightGui;
     int selectedLeftRowIdx;

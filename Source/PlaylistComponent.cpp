@@ -9,7 +9,9 @@
 */
 
 #include <JuceHeader.h>
+#include "RowComponent.h"
 #include "PlaylistComponent.h"
+
 
 //==============================================================================
 PlaylistComponent::PlaylistComponent(DeckGUI* _leftGui, DeckGUI* _rightGui):
@@ -50,7 +52,7 @@ void PlaylistComponent::resized()
 }
 
 int PlaylistComponent::getNumRows(){
-    return trackTitles.size();
+    return rows.size();
 }
 
 void PlaylistComponent::paintRowBackground (juce::Graphics & g, int rowNumber, int width, int height, bool rowIsSelected){
@@ -75,13 +77,7 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
             existingComponentToUpdate=btn;
         } else {
             juce::ToggleButton* toggleButton = dynamic_cast<juce::ToggleButton*>(existingComponentToUpdate);
-            if (rowNumber != selectedLeftRowIdx){
-                {
-                    toggleButton->setToggleState(false, juce::NotificationType::sendNotification);
-                }
-            } else {
-                toggleButton->setToggleState(true, juce::NotificationType::sendNotification);
-            }
+            toggleButton->setToggleState(rows.at(rowNumber).left(), juce::NotificationType::sendNotification);
         }
     }
     if(columnId==2){
@@ -93,13 +89,7 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
             existingComponentToUpdate=btn;
         }else{
             juce::ToggleButton* toggleButton = dynamic_cast<juce::ToggleButton*>(existingComponentToUpdate);
-            if (rowNumber != selectedRightRowIdx){
-                {
-                    toggleButton->setToggleState(false, juce::NotificationType::sendNotification);
-                }
-            }else {
-                toggleButton->setToggleState(true, juce::NotificationType::sendNotification);
-            }
+            toggleButton->setToggleState(rows.at(rowNumber).right(), juce::NotificationType::sendNotification);
         }
     }
     if(columnId==4){
@@ -122,50 +112,49 @@ void PlaylistComponent::buttonClicked (juce::Button* button){
             juce::Array<juce::File> files = chooser.getResults();
             for (const auto& file : files){
                 loadedFiles.push_back(file);
-                trackTitles.push_back(file.getFileName().toStdString()); }
+                trackTitles.push_back(file.getFileName().toStdString());
+                RowComponent row(false, false, file.getFileName().toStdString(), file);
+                rows.push_back(row);
+
+            }
             tableComponent.updateContent();
             });
     }else{
         juce::String buttonID = button->getComponentID();
+        
             if (buttonID.startsWith("delete"))
                {
                    int rowNumber = buttonID.substring(6).getIntValue(); // Remove "delete" prefix
+                   
+                   
                    trackTitles.erase(trackTitles.begin() + rowNumber);
-                   if(selectedLeftRowIdx == rowNumber){
-                       selectedLeftRowIdx = -1;
-                       leftGui -> clearWaveDisplay();
-
-                   }
-                   if (selectedRightRowIdx == rowNumber) {
-                       selectedRightRowIdx = -1;
-                       rightGui -> clearWaveDisplay();
-                   }
-                   if(rowNumber < selectedLeftRowIdx){
-                       selectedLeftRowIdx -= 1;
-                   }
-                   if(rowNumber < selectedRightRowIdx){
-                       selectedRightRowIdx -= 1;
-                   }
+  
+                   if(rows.at(rowNumber).left()) leftGui -> clearWaveDisplay();
+                   
+                   if(rows.at(rowNumber).right()) rightGui -> clearWaveDisplay();
+                   
+                   rows.erase(rows.begin() + rowNumber);
                    tableComponent.updateContent();
+                   
                }
-            if (buttonID.startsWith("L")){
+            if (buttonID.startsWith("L") || buttonID.startsWith("R")){
+                DeckGUI* gui = buttonID.startsWith("L") ? leftGui : rightGui;
+                int optIdx = buttonID.startsWith("L") ? 0 : 1 ; // 0 is left, 1 is right
+                int rowNumber = buttonID.substring(1).getIntValue();
                 if (button -> getToggleState())
                 {
-                    selectedLeftRowIdx = buttonID.substring(1).getIntValue();
-                    tableComponent.updateContent();
-                    leftGui -> addToMyGui(loadedFiles[selectedLeftRowIdx]);
-                }else{
-                    leftGui -> clearWaveDisplay();
-                }}
-            if (buttonID.startsWith("R")){
-                if (button -> getToggleState()){
-                selectedRightRowIdx = buttonID.substring(1).getIntValue();
-                tableComponent.updateContent();
-                rightGui -> addToMyGui(loadedFiles[selectedRightRowIdx]);
-                }else{
-                rightGui -> clearWaveDisplay();
+                    gui -> addToMyGui(rows.at(rowNumber).file);
+                    // set it to true index=rowNumber
+                    for (int i = 0; i < rows.size(); ++i) rows.at(i).options[optIdx] = i == rowNumber;
                 }
+                else {
+                    gui -> clearWaveDisplay();
+                    rows.at(rowNumber).options[optIdx] = false;
+                }
+                tableComponent.updateContent();
+          
             }
+        
     }
 }
 
