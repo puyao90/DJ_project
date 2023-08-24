@@ -96,9 +96,18 @@ void DeckGUI::loadToMyGui() {
     fChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
         {
             juce::File chosenFile = chooser.getResult();
-        player->loadURL(juce::URL{chosenFile});
-        waveformdisplay.loadURL(juce::URL{chosenFile});
+        addToMyGui(chosenFile);
         });
+}
+
+void DeckGUI::addToMyGui(juce::File chosenFile){
+    player->loadURL(juce::URL{chosenFile});
+    waveformdisplay.loadURL(juce::URL{chosenFile});
+    
+}
+
+void DeckGUI::clearWaveDisplay(){
+    waveformdisplay.clear();
 }
 
 void DeckGUI::sliderValueChanged (juce::Slider* slider){

@@ -56,6 +56,11 @@ void WaveformDisplay::resized()
 
 }
 
+void WaveformDisplay::clear() {
+    audioThumb.clear();
+    fileLoaded = false;
+}
+
 void WaveformDisplay::loadURL(juce::URL audioURL){
     audioThumb.clear();
     fileLoaded=audioThumb.setSource(new juce::URLInputSource(audioURL));

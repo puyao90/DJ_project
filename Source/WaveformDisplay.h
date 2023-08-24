@@ -29,10 +29,12 @@ public:
     void loadURL(juce::URL audioURL);
     
     void setPositionRelative(double pos);
+    
+    void clear();
 
 private:
-    juce::AudioThumbnail audioThumb;
     bool fileLoaded;
+    juce::AudioThumbnail audioThumb;
     double position;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (WaveformDisplay)

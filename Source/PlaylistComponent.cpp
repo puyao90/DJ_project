@@ -13,7 +13,7 @@
 
 //==============================================================================
 PlaylistComponent::PlaylistComponent(DeckGUI* _leftGui, DeckGUI* _rightGui):
-    leftGui(_leftGui),rightGui(_rightGui)
+    leftGui(_leftGui),rightGui(_rightGui),selectedLeftRowIdx(-1),selectedRightRowIdx(-1)
 {
     addAndMakeVisible(loadButton);
     tableComponent.getHeader().addColumn("", 1, 40);
@@ -73,6 +73,13 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
             btn->setComponentID(id);
             btn->addListener(this);
             existingComponentToUpdate=btn;
+        } else {
+            juce::ToggleButton* toggleButton = dynamic_cast<juce::ToggleButton*>(existingComponentToUpdate);
+            if (toggleButton != nullptr && rowNumber != selectedLeftRowIdx){
+                {
+                    toggleButton->setToggleState(false, juce::NotificationType::sendNotification);
+                }
+            }
         }
     }
     if(columnId==2){
@@ -82,6 +89,13 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
             btn->setComponentID(id);
             btn->addListener(this);
             existingComponentToUpdate=btn;
+        }else{
+            juce::ToggleButton* toggleButton = dynamic_cast<juce::ToggleButton*>(existingComponentToUpdate);
+            if (toggleButton != nullptr && rowNumber != selectedRightRowIdx){
+                {
+                    toggleButton->setToggleState(false, juce::NotificationType::sendNotification);
+                }
+            }
         }
     }
     if(columnId==4){
@@ -98,12 +112,12 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
 
 void PlaylistComponent::buttonClicked (juce::Button* button){
     if(button==&loadButton){
-        auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles|juce::FileBrowserComponent::openMode;
-        fChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
+        auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles|juce::FileBrowserComponent::openMode|juce::FileBrowserComponent::canSelectMultipleItems;
+        fileChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
             {
             juce::Array<juce::File> files = chooser.getResults();
             for (const auto& file : files){
-                selectedFiles.push_back(file);
+                loadedFiles.push_back(file);
                 trackTitles.push_back(file.getFileName().toStdString()); }
             tableComponent.updateContent();
             });
@@ -115,10 +129,34 @@ void PlaylistComponent::buttonClicked (juce::Button* button){
                    trackTitles.erase(trackTitles.begin() + rowNumber);
                    tableComponent.updateContent();
                }
-             if (buttonID.startsWith("L"))
-        {
+        if (buttonID.startsWith("L")){
+            if (button -> getToggleState())
+                       {
+                           selectedLeftRowIdx = buttonID.substring(1).getIntValue();
+                           tableComponent.updateContent();
+                           leftGui -> addToMyGui(loadedFiles[selectedLeftRowIdx]);
+                       }
+                       else
+                       {
+                           leftGui -> clearWaveDisplay();
+                           
+                       }
 
         }
+        if (buttonID.startsWith("R")){
+            if (button -> getToggleState()){
+                selectedRightRowIdx = buttonID.substring(1).getIntValue();
+                tableComponent.updateContent();
+                rightGui -> addToMyGui(loadedFiles[selectedRightRowIdx]);
+            }
+            else {
+                rightGui -> clearWaveDisplay();
+            }
+            
+        }
+        
+       
+        
     }
 }
 

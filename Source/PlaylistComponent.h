@@ -37,10 +37,12 @@ private:
     juce::TextButton loadButton{"Load to Playlist"};
     juce::TableListBox tableComponent;
     std::vector<std::string> trackTitles;
-    std::vector<juce::File> selectedFiles;
+    std::vector<juce::File> loadedFiles;
     DeckGUI* leftGui;
     DeckGUI* rightGui;
-    juce::FileChooser fChooser{"Select a file..."};
+    int selectedLeftRowIdx;
+    int selectedRightRowIdx;
+    juce::FileChooser fileChooser{"Select a file..."};
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
 };
