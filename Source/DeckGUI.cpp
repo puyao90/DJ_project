@@ -87,14 +87,18 @@ void DeckGUI::buttonClicked(juce::Button* button){
         player->stop();
     }
     if(button==&loadButton){
-        auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles;
-        fChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
-            {
-                juce::File chosenFile = chooser.getResult();
-            player->loadURL(juce::URL{chosenFile});
-            waveformdisplay.loadURL(juce::URL{chosenFile});
-            });
+        loadToMyGui();
     }
+}
+
+void DeckGUI::loadToMyGui() {
+    auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles;
+    fChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
+        {
+            juce::File chosenFile = chooser.getResult();
+        player->loadURL(juce::URL{chosenFile});
+        waveformdisplay.loadURL(juce::URL{chosenFile});
+        });
 }
 
 void DeckGUI::sliderValueChanged (juce::Slider* slider){
