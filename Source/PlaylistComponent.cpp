@@ -67,7 +67,7 @@ void PlaylistComponent::paintCell (juce::Graphics & g, int rowNumber, int column
 juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, Component *existingComponentToUpdate){
     if(columnId==1){
         if(existingComponentToUpdate==nullptr){
-            juce::TextButton* btn=new juce::TextButton{"L"};
+            juce::ToggleButton* btn=new juce::ToggleButton{"L"};
             juce::String id{"L"+std::to_string(rowNumber)};
             btn->setComponentID(id);
             btn->addListener(this);
@@ -76,7 +76,7 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
     }
     if(columnId==2){
         if(existingComponentToUpdate==nullptr){
-            juce::TextButton* btn=new juce::TextButton{"R"};
+            juce::ToggleButton* btn=new juce::ToggleButton{"R"};
             juce::String id{"R"+std::to_string(rowNumber)};
             btn->setComponentID(id);
             btn->addListener(this);
@@ -114,6 +114,10 @@ void PlaylistComponent::buttonClicked (juce::Button* button){
                    trackTitles.erase(trackTitles.begin() + rowNumber);
                    tableComponent.updateContent();
                }
+             if (buttonID.startsWith("L"))
+        {
+
+        }
     }
 }
 
