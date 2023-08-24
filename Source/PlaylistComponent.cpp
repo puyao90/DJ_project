@@ -12,7 +12,8 @@
 #include "PlaylistComponent.h"
 
 //==============================================================================
-PlaylistComponent::PlaylistComponent()
+PlaylistComponent::PlaylistComponent(DJAudioPlayer* _leftPlayer, DJAudioPlayer* _rightPlayer):
+    leftPlayer(_leftPlayer),rightPlayer(_rightPlayer)
 {
     addAndMakeVisible(loadButton);
     tableComponent.getHeader().addColumn("", 1, 40);

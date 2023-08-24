@@ -9,7 +9,7 @@
 */
 
 #pragma once
-
+#include "DJAudioPlayer.h"
 #include <JuceHeader.h>
 
 //==============================================================================
@@ -20,7 +20,7 @@ class PlaylistComponent  : public juce::Component,
                            public juce::Button::Listener
 {
 public:
-    PlaylistComponent();
+    PlaylistComponent(DJAudioPlayer* _leftPlayer, DJAudioPlayer* _rightPlayer);
     ~PlaylistComponent() override;
 
     void paint (juce::Graphics&) override;
@@ -38,7 +38,8 @@ private:
     juce::TableListBox tableComponent;
     std::vector<std::string> trackTitles;
     std::vector<juce::File> selectedFiles;
-    
+    DJAudioPlayer* leftPlayer;
+    DJAudioPlayer* rightPlayer;
     juce::FileChooser fChooser{"Select a file..."};
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
