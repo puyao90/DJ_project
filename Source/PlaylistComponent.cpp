@@ -75,10 +75,12 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
             existingComponentToUpdate=btn;
         } else {
             juce::ToggleButton* toggleButton = dynamic_cast<juce::ToggleButton*>(existingComponentToUpdate);
-            if (toggleButton != nullptr && rowNumber != selectedLeftRowIdx){
+            if (rowNumber != selectedLeftRowIdx){
                 {
                     toggleButton->setToggleState(false, juce::NotificationType::sendNotification);
                 }
+            } else {
+                toggleButton->setToggleState(true, juce::NotificationType::sendNotification);
             }
         }
     }
@@ -91,10 +93,12 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
             existingComponentToUpdate=btn;
         }else{
             juce::ToggleButton* toggleButton = dynamic_cast<juce::ToggleButton*>(existingComponentToUpdate);
-            if (toggleButton != nullptr && rowNumber != selectedRightRowIdx){
+            if (rowNumber != selectedRightRowIdx){
                 {
                     toggleButton->setToggleState(false, juce::NotificationType::sendNotification);
                 }
+            }else {
+                toggleButton->setToggleState(true, juce::NotificationType::sendNotification);
             }
         }
     }
@@ -123,40 +127,45 @@ void PlaylistComponent::buttonClicked (juce::Button* button){
             });
     }else{
         juce::String buttonID = button->getComponentID();
-               if (buttonID.startsWith("delete"))
+            if (buttonID.startsWith("delete"))
                {
                    int rowNumber = buttonID.substring(6).getIntValue(); // Remove "delete" prefix
                    trackTitles.erase(trackTitles.begin() + rowNumber);
+                   if(selectedLeftRowIdx == rowNumber){
+                       selectedLeftRowIdx = -1;
+                       leftGui -> clearWaveDisplay();
+
+                   }
+                   if (selectedRightRowIdx == rowNumber) {
+                       selectedRightRowIdx = -1;
+                       rightGui -> clearWaveDisplay();
+                   }
+                   if(rowNumber < selectedLeftRowIdx){
+                       selectedLeftRowIdx -= 1;
+                   }
+                   if(rowNumber < selectedRightRowIdx){
+                       selectedRightRowIdx -= 1;
+                   }
                    tableComponent.updateContent();
                }
-        if (buttonID.startsWith("L")){
-            if (button -> getToggleState())
-                       {
-                           selectedLeftRowIdx = buttonID.substring(1).getIntValue();
-                           tableComponent.updateContent();
-                           leftGui -> addToMyGui(loadedFiles[selectedLeftRowIdx]);
-                       }
-                       else
-                       {
-                           leftGui -> clearWaveDisplay();
-                           
-                       }
-
-        }
-        if (buttonID.startsWith("R")){
-            if (button -> getToggleState()){
+            if (buttonID.startsWith("L")){
+                if (button -> getToggleState())
+                {
+                    selectedLeftRowIdx = buttonID.substring(1).getIntValue();
+                    tableComponent.updateContent();
+                    leftGui -> addToMyGui(loadedFiles[selectedLeftRowIdx]);
+                }else{
+                    leftGui -> clearWaveDisplay();
+                }}
+            if (buttonID.startsWith("R")){
+                if (button -> getToggleState()){
                 selectedRightRowIdx = buttonID.substring(1).getIntValue();
                 tableComponent.updateContent();
                 rightGui -> addToMyGui(loadedFiles[selectedRightRowIdx]);
-            }
-            else {
+                }else{
                 rightGui -> clearWaveDisplay();
+                }
             }
-            
-        }
-        
-       
-        
     }
 }
 

@@ -95,7 +95,7 @@ void DeckGUI::loadToMyGui() {
     auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles;
     fChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
         {
-            juce::File chosenFile = chooser.getResult();
+        juce::File chosenFile = chooser.getResult();
         addToMyGui(chosenFile);
         });
 }
