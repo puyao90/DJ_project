@@ -15,7 +15,7 @@
 
 //==============================================================================
 PlaylistComponent::PlaylistComponent(DeckGUI* _leftGui, DeckGUI* _rightGui):
-    leftGui(_leftGui),rightGui(_rightGui),selectedLeftRowIdx(-1),selectedRightRowIdx(-1)
+    leftGui(_leftGui),rightGui(_rightGui),selectedLeftRowIdx(-1),selectedRightRowIdx(-1),freeze(false)
 {
     addAndMakeVisible(loadButton);
     tableComponent.getHeader().addColumn("", 1, 40);
@@ -38,11 +38,6 @@ void PlaylistComponent::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
-
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
-    g.drawText ("PlaylistComponent", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
 }
 
 void PlaylistComponent::resized()
@@ -64,7 +59,7 @@ void PlaylistComponent::paintRowBackground (juce::Graphics & g, int rowNumber, i
 }
 
 void PlaylistComponent::paintCell (juce::Graphics & g, int rowNumber, int columnId, int width, int height, bool rowIsSelected){
-    g.drawText(trackTitles[rowNumber], 2, 0, width-4, height, juce::Justification::centredLeft);
+    g.drawText(rows.at(rowNumber).title, 2, 0, width-4, height, juce::Justification::centredLeft);
 }
 
 juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int columnId, bool isRowSelected, Component *existingComponentToUpdate){
@@ -77,7 +72,7 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
             existingComponentToUpdate=btn;
         } else {
             juce::ToggleButton* toggleButton = dynamic_cast<juce::ToggleButton*>(existingComponentToUpdate);
-            toggleButton->setToggleState(rows.at(rowNumber).left(), juce::NotificationType::sendNotification);
+            toggleButton-> setToggleState(rows.at(rowNumber).left(), juce::NotificationType::dontSendNotification);
         }
     }
     if(columnId==2){
@@ -89,7 +84,7 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
             existingComponentToUpdate=btn;
         }else{
             juce::ToggleButton* toggleButton = dynamic_cast<juce::ToggleButton*>(existingComponentToUpdate);
-            toggleButton->setToggleState(rows.at(rowNumber).right(), juce::NotificationType::sendNotification);
+            toggleButton-> setToggleState(rows.at(rowNumber).right(), juce::NotificationType::dontSendNotification);
         }
     }
     if(columnId==4){
@@ -104,58 +99,71 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
     return existingComponentToUpdate;
 }
 
+
+
 void PlaylistComponent::buttonClicked (juce::Button* button){
+    freeze = true;
     if(button==&loadButton){
         auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles|juce::FileBrowserComponent::openMode|juce::FileBrowserComponent::canSelectMultipleItems;
-        fileChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
+            fileChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
             {
             juce::Array<juce::File> files = chooser.getResults();
             for (const auto& file : files){
-                loadedFiles.push_back(file);
-                trackTitles.push_back(file.getFileName().toStdString());
-                RowComponent row(false, false, file.getFileName().toStdString(), file);
-                rows.push_back(row);
-
+                bool fileExists = false;
+                for (const auto& row : rows) {
+                    if (row.file.getFileName() == file.getFileName()) {
+                        fileExists = true;
+                        break;
+                    }
+                }
+                if (!fileExists) {
+                    RowComponent row(false, false, file.getFileName().toStdString(), file);
+                    rows.push_back(row);
+                    tableComponent.updateContent();
+                }
             }
-            tableComponent.updateContent();
             });
-    }else{
+        }
+    else
+        {
         juce::String buttonID = button->getComponentID();
         
             if (buttonID.startsWith("delete"))
                {
+                   std::cout << "DE" << std::endl;
                    int rowNumber = buttonID.substring(6).getIntValue(); // Remove "delete" prefix
-                   
-                   
-                   trackTitles.erase(trackTitles.begin() + rowNumber);
-  
                    if(rows.at(rowNumber).left()) leftGui -> clearWaveDisplay();
-                   
                    if(rows.at(rowNumber).right()) rightGui -> clearWaveDisplay();
-                   
                    rows.erase(rows.begin() + rowNumber);
-                   tableComponent.updateContent();
                    
                }
             if (buttonID.startsWith("L") || buttonID.startsWith("R")){
+                std::cout << "LR: isL? =" << std::boolalpha << buttonID.startsWith("L") << std::endl;
                 DeckGUI* gui = buttonID.startsWith("L") ? leftGui : rightGui;
                 int optIdx = buttonID.startsWith("L") ? 0 : 1 ; // 0 is left, 1 is right
                 int rowNumber = buttonID.substring(1).getIntValue();
-                if (button -> getToggleState())
-                {
-                    gui -> addToMyGui(rows.at(rowNumber).file);
-                    // set it to true index=rowNumber
+                bool currentRowsPreviousStatus = rows.at(rowNumber).options[optIdx];
+                int previousSelected = -1;
+                for (int i = 0; i < rows.size(); ++i) if(rows.at(i).options[optIdx]) previousSelected = i;
+                
+                bool currentView = button -> getToggleState();
+                
+                std::cout << "rowNumber -> " << rowNumber << std::endl;
+                std::cout << "currentView -> " << std::boolalpha << currentView << std::endl;
+                std::cout << "currentRowsPreviousStatus -> " << std::boolalpha << currentRowsPreviousStatus << std::endl;
+                std::cout << "previousSelected -> " << previousSelected << std::endl;
+                if (currentView){
                     for (int i = 0; i < rows.size(); ++i) rows.at(i).options[optIdx] = i == rowNumber;
-                }
-                else {
                     gui -> clearWaveDisplay();
-                    rows.at(rowNumber).options[optIdx] = false;
+                    gui -> addToMyGui(rows.at(rowNumber).file);
+                } else {
+                    for (int i = 0; i < rows.size(); ++i) rows.at(i).options[optIdx] = false;
+                    gui -> clearWaveDisplay();
                 }
-                tableComponent.updateContent();
-          
             }
         
     }
+    tableComponent.updateContent();
 }
 
 
