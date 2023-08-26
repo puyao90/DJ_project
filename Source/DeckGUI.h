@@ -12,7 +12,6 @@
 
 #include <JuceHeader.h>
 #include "DJAudioPlayer.h"
-#include "WaveformDisplay.h"
 #include "DoubleWaveform.h"
 
 //==============================================================================
@@ -60,7 +59,6 @@ private:
     
     juce::FileChooser fChooser{"Select a file..."};
     DJAudioPlayer* player;
-    WaveformDisplay waveformdisplay;
     DoubleWaveform* doubleWaveform;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)

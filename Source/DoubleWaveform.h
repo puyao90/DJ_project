@@ -16,21 +16,27 @@
 //==============================================================================
 /*
 */
-class DoubleWaveform  : public juce::Component
+class DoubleWaveform  : public juce::Component,public juce::ChangeListener
 {
 public:
-    DoubleWaveform(DJAudioPlayer* player,juce::AudioFormatManager& formatManagerToUse,juce::AudioThumbnailCache& cacheToUse);
+    DoubleWaveform(juce::AudioFormatManager& formatManagerToUse,juce::AudioThumbnailCache& cacheToUse,juce::Colour myColor);
     ~DoubleWaveform() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
     
+    void changeListenerCallback(juce::ChangeBroadcaster *source) override;
+    
     void loadURL(juce::URL audioURL);
+    
+    void setPositionRelative(double pos);
+    
+    void clear();
 
 private:
-    DJAudioPlayer* player;
     bool fileLoaded;
     juce::AudioThumbnail audioThumb;
     double position;
+    juce::Colour myColor;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DoubleWaveform)
 };

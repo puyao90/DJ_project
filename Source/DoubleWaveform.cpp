@@ -13,12 +13,9 @@
 
 
 //==============================================================================
-DoubleWaveform::DoubleWaveform(DJAudioPlayer* _player,juce::AudioFormatManager& formatManagerToUse,juce::AudioThumbnailCache& cacheToUse):player(_player),
-audioThumb(1000,formatManagerToUse,cacheToUse),fileLoaded(false),position(0)
+DoubleWaveform::DoubleWaveform(juce::AudioFormatManager& formatManagerToUse,juce::AudioThumbnailCache& cacheToUse,juce::Colour _myColor):fileLoaded(false),audioThumb(1000,formatManagerToUse,cacheToUse),position(0),myColor(_myColor)
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
-
+    audioThumb.addChangeListener(this);
 }
 
 DoubleWaveform::~DoubleWaveform()
@@ -27,23 +24,17 @@ DoubleWaveform::~DoubleWaveform()
 
 void DoubleWaveform::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
 
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
-    g.setColour (juce::Colours::orange);
+    g.setColour (myColor);
     if(fileLoaded){
         audioThumb.drawChannel(g, getLocalBounds(), 0, audioThumb.getTotalLength(), 0, 1.0f);
-        g.setColour(juce::Colours::lightgreen);
-        g.drawRect(position*getWidth(), 0, getWidth()/20, getHeight());
+        g.setColour(juce::Colours::white);
+        g.drawRect(position*getWidth(), 0, getWidth()/42, getHeight());
     }else{
     g.setFont (20.0f);
     g.drawText ("File not loaded...", getLocalBounds(), juce::Justification::centred, true);
@@ -57,18 +48,10 @@ void DoubleWaveform::resized()
 
 }
 
-//void DoubleWaveform::changeListenerCallback(juce::ChangeBroadcaster *source){
-////    std::cout<<"WaveformDisplay change received!"<<std::endl;
-//    repaint();
-//}
-//
-//void DoubleWaveform::setPositionRelative(double pos){
-//    if(pos!=position){
-//        position=pos;
-//        repaint();
-//    }
-//}
-
+void DoubleWaveform::clear() {
+    audioThumb.clear();
+    fileLoaded = false;
+}
 
 void DoubleWaveform::loadURL(juce::URL audioURL){
     audioThumb.clear();
@@ -77,4 +60,16 @@ void DoubleWaveform::loadURL(juce::URL audioURL){
         std::cout<<"DoubleWaveform::loadURL  loaded!"<<std::endl;
     }
     else{std::cout<<"DoubleWaveform::loadURL   not loaded!"<<std::endl;}
+}
+
+void DoubleWaveform::changeListenerCallback(juce::ChangeBroadcaster *source){
+//    std::cout<<"WaveformDisplay change received!"<<std::endl;
+    repaint();
+}
+
+void DoubleWaveform::setPositionRelative(double pos){
+    if(pos!=position){
+        position=pos;
+        repaint();
+    }
 }

@@ -592,9 +592,6 @@
     <ClCompile Include="..\..\Source\PlaylistComponent.cpp">
       <Filter>AAA\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\WaveformDisplay.cpp">
-      <Filter>AAA\Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\DeckGUI.cpp">
       <Filter>AAA\Source</Filter>
     </ClCompile>
@@ -3013,9 +3010,6 @@
       <Filter>AAA\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PlaylistComponent.h">
-      <Filter>AAA\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\WaveformDisplay.h">
       <Filter>AAA\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\DeckGUI.h">

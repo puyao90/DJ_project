@@ -143,7 +143,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\Source\DoubleWaveform.cpp"/>
     <ClCompile Include="..\..\Source\PlaylistComponent.cpp"/>
-    <ClCompile Include="..\..\Source\WaveformDisplay.cpp"/>
     <ClCompile Include="..\..\Source\DeckGUI.cpp"/>
     <ClCompile Include="..\..\Source\DJAudioPlayer.cpp"/>
     <ClCompile Include="..\..\Source\Main.cpp"/>
@@ -2390,7 +2389,6 @@
     <ClInclude Include="..\..\Source\DoubleWaveform.h"/>
     <ClInclude Include="..\..\Source\RowComponent.h"/>
     <ClInclude Include="..\..\Source\PlaylistComponent.h"/>
-    <ClInclude Include="..\..\Source\WaveformDisplay.h"/>
     <ClInclude Include="..\..\Source\DeckGUI.h"/>
     <ClInclude Include="..\..\Source\DJAudioPlayer.h"/>
     <ClInclude Include="..\..\Source\MainComponent.h"/>

@@ -17,7 +17,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
                  juce::AudioThumbnailCache& cacheToUse,
                  DoubleWaveform* _doubleWaveform
                  )
-:player(_player),waveformdisplay(formatManagerToUse,cacheToUse),doubleWaveform(_doubleWaveform)
+:player(_player),doubleWaveform(_doubleWaveform)
 {
     addAndMakeVisible(playButton);
     addAndMakeVisible(stopButton);
@@ -32,9 +32,7 @@ DeckGUI::DeckGUI(DJAudioPlayer* _player,
     addAndMakeVisible(volLabel);
     addAndMakeVisible(speedLabel);
     addAndMakeVisible(posLabel);
-    
-    addAndMakeVisible(waveformdisplay);
-    
+
     playButton.addListener(this);
     stopButton.addListener(this);
     
@@ -64,7 +62,7 @@ void DeckGUI::paint (juce::Graphics& g)
 
 void DeckGUI::resized()
 {
-    double rowH=getHeight()/7;
+    double rowH=getHeight()/5;
     int labelWidth = 30;
     int sliderWidth=getWidth()-labelWidth;
     playButton.setBounds(0,0,getWidth(),rowH);
@@ -75,7 +73,6 @@ void DeckGUI::resized()
     speedSlider.setBounds(labelWidth,rowH*3,sliderWidth,rowH);
     posLabel.setBounds(0, rowH * 4, labelWidth, rowH);
     posSlider.setBounds(labelWidth,rowH*4,sliderWidth,rowH);
-    waveformdisplay.setBounds(0,rowH*5,getWidth(),rowH*2);
 }
 
 void DeckGUI::buttonClicked(juce::Button* button){
@@ -99,12 +96,11 @@ void DeckGUI::loadToMyGui() {
 void DeckGUI::addToMyGui(juce::File chosenFile){
     player->loadURL(juce::URL{chosenFile});
     doubleWaveform -> loadURL(juce::URL{chosenFile});
-    waveformdisplay.loadURL(juce::URL{chosenFile});
     
 }
 
 void DeckGUI::clearWaveDisplay(){
-    waveformdisplay.clear();
+    doubleWaveform -> clear();
 }
 
 void DeckGUI::sliderValueChanged (juce::Slider* slider){
@@ -132,7 +128,7 @@ void DeckGUI::filesDropped(const juce::StringArray &files, int x, int y){
 }
 
 void DeckGUI::timerCallback(){
-    waveformdisplay.setPositionRelative(player->getPositionRelative());
+    doubleWaveform ->setPositionRelative(player->getPositionRelative());
 }
 
 

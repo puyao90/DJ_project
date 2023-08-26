@@ -30,13 +30,12 @@ public:
 private:
     juce::AudioFormatManager formatManager;
     juce::AudioThumbnailCache thumbCache{100};
-    
 
     DJAudioPlayer playerL{formatManager};
     DJAudioPlayer playerR{formatManager};
     
-    DoubleWaveform waveformL{&playerL,formatManager,thumbCache};
-    DoubleWaveform waveformR{&playerR,formatManager,thumbCache};
+    DoubleWaveform waveformL{formatManager,thumbCache,juce::Colour(254,40,88)};
+    DoubleWaveform waveformR{formatManager,thumbCache,juce::Colour(42,240,234)};
     
     DeckGUI deckGUI1{&playerL,formatManager,thumbCache,&waveformL};
     DeckGUI deckGUI2{&playerR,formatManager,thumbCache,&waveformR};
