@@ -40,11 +40,13 @@
 		EFD1F434EA7F3EF7D03060CA /* include_juce_gui_basics.mm */ = {isa = PBXBuildFile; fileRef = D24D3E618FDF5AF4ADBB892C; };
 		F44E17F40F8618881AB1D433 /* include_juce_audio_basics.mm */ = {isa = PBXBuildFile; fileRef = 69E9AA374846FA0801CB38BB; };
 		F96A250F98497B10AC388074 /* DJAudioPlayer.cpp */ = {isa = PBXBuildFile; fileRef = D3D75F169BCA9E9076CEFA15; };
+		FF5580DD25C9AA6AB7B1B1C1 /* DoubleWaveform.cpp */ = {isa = PBXBuildFile; fileRef = 4AA7C508B24F0F422C453164; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		02E0F7C357FED80DE4BD6ECA /* PlaylistComponent.cpp */ /* PlaylistComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PlaylistComponent.cpp; path = ../../Source/PlaylistComponent.cpp; sourceTree = SOURCE_ROOT; };
 		0AB3455268FFACD43E6C8444 /* juce_gui_extra */ /* juce_gui_extra */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_extra; path = "~/JUCE/modules/juce_gui_extra"; sourceTree = "<absolute>"; };
+		10816857512E03735961107F /* DoubleWaveform.h */ /* DoubleWaveform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DoubleWaveform.h; path = ../../Source/DoubleWaveform.h; sourceTree = SOURCE_ROOT; };
 		1940E6ABD12F823BFBFAC4DD /* include_juce_data_structures.mm */ /* include_juce_data_structures.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_data_structures.mm; path = ../../JuceLibraryCode/include_juce_data_structures.mm; sourceTree = SOURCE_ROOT; };
 		1C1C2A130421A35477ACAB81 /* DiscRecording.framework */ /* DiscRecording.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
 		1CE6506FBEBCE1369A1E658E /* Security.framework */ /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -58,6 +60,7 @@
 		3ED105F2F94252F2EC0021D2 /* JuceHeader.h */ /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
 		3EE582702BC373E48DEC9BC5 /* PlaylistComponent.h */ /* PlaylistComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlaylistComponent.h; path = ../../Source/PlaylistComponent.h; sourceTree = SOURCE_ROOT; };
 		44B42BD3D1027C25B6B93D1A /* RecentFilesMenuTemplate.nib */ /* RecentFilesMenuTemplate.nib */ = {isa = PBXFileReference; lastKnownFileType = file.nib; name = RecentFilesMenuTemplate.nib; path = RecentFilesMenuTemplate.nib; sourceTree = SOURCE_ROOT; };
+		4AA7C508B24F0F422C453164 /* DoubleWaveform.cpp */ /* DoubleWaveform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DoubleWaveform.cpp; path = ../../Source/DoubleWaveform.cpp; sourceTree = SOURCE_ROOT; };
 		59DBE1892C26509E65FBE770 /* Info-App.plist */ /* Info-App.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-App.plist"; path = "Info-App.plist"; sourceTree = SOURCE_ROOT; };
 		5F9C7575E19CF3696BA679A1 /* WaveformDisplay.cpp */ /* WaveformDisplay.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = WaveformDisplay.cpp; path = ../../Source/WaveformDisplay.cpp; sourceTree = SOURCE_ROOT; };
 		64571DFA3C32EA945552DBD2 /* WaveformDisplay.h */ /* WaveformDisplay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = WaveformDisplay.h; path = ../../Source/WaveformDisplay.h; sourceTree = SOURCE_ROOT; };
@@ -149,6 +152,8 @@
 		5C42F86CAB85F086E092EC79 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4AA7C508B24F0F422C453164,
+				10816857512E03735961107F,
 				EA9B5138C39FC10E8236E7E8,
 				02E0F7C357FED80DE4BD6ECA,
 				3EE582702BC373E48DEC9BC5,
@@ -320,6 +325,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF5580DD25C9AA6AB7B1B1C1,
 				5A3396F33C2180C47D6BFEAC,
 				5FB37888D781189219608F23,
 				C92C5962F364B952D11AA6A4,

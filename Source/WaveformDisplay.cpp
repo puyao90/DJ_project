@@ -12,8 +12,12 @@
 #include "WaveformDisplay.h"
 
 //==============================================================================
-WaveformDisplay::WaveformDisplay(juce::AudioFormatManager& formatManagerToUse,juce::AudioThumbnailCache& cacheToUse):
-audioThumb(1000,formatManagerToUse,cacheToUse),fileLoaded(false),position(0)
+WaveformDisplay::WaveformDisplay(
+                                 juce::AudioFormatManager& formatManagerToUse,
+                                 juce::AudioThumbnailCache& cacheToUse):
+                                fileLoaded(false),
+                                position(0),
+                                audioThumb(1000,formatManagerToUse,cacheToUse)
 {
     // In your constructor, you should add any child components, and
     // initialise any special settings that your component needs.
@@ -32,7 +36,7 @@ void WaveformDisplay::paint (juce::Graphics& g)
        You should replace everything in this method with your own
        drawing code..
     */
-
+        
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
@@ -71,7 +75,7 @@ void WaveformDisplay::loadURL(juce::URL audioURL){
 }
 
 void WaveformDisplay::changeListenerCallback(juce::ChangeBroadcaster *source){
-    std::cout<<"WaveformDisplay change received!"<<std::endl;
+//    std::cout<<"WaveformDisplay change received!"<<std::endl;
     repaint();
 }
 

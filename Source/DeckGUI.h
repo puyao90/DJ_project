@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "DJAudioPlayer.h"
 #include "WaveformDisplay.h"
+#include "DoubleWaveform.h"
 
 //==============================================================================
 /*
@@ -22,9 +23,15 @@ class DeckGUI  : public juce::Component,
                 public juce::Slider::Listener,
                 public juce::FileDragAndDropTarget,
                 public juce::Timer
+                
 {
+    
+
 public:
-    DeckGUI(DJAudioPlayer* player,juce::AudioFormatManager& formatManagerToUse,juce::AudioThumbnailCache& cacheToUse);
+    DeckGUI(DJAudioPlayer* player,
+            juce::AudioFormatManager& formatManagerToUse,
+            juce::AudioThumbnailCache& cacheToUse,
+            DoubleWaveform* doubleWaveform);
     ~DeckGUI() override;
 
     void paint (juce::Graphics&) override;
@@ -39,11 +46,11 @@ public:
     void addToMyGui(juce::File chosenFile);
     void timerCallback() override;
     void clearWaveDisplay();
+    
 
 private:
     juce::TextButton playButton{"PLAY"};
     juce::TextButton stopButton{"STOP"};
-    juce::TextButton loadButton{"LOAD"};
     juce::Slider volSlider;
     juce::Slider speedSlider;
     juce::Slider posSlider;
@@ -54,6 +61,7 @@ private:
     juce::FileChooser fChooser{"Select a file..."};
     DJAudioPlayer* player;
     WaveformDisplay waveformdisplay;
+    DoubleWaveform* doubleWaveform;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DeckGUI)
 };

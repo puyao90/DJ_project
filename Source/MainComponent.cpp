@@ -19,6 +19,8 @@ MainComponent::MainComponent()
     {
         setAudioChannels (0, 2);
     }
+    addAndMakeVisible(waveformL);
+    addAndMakeVisible(waveformR);
     addAndMakeVisible(deckGUI1);
     addAndMakeVisible(deckGUI2);
     addAndMakeVisible(playlistComponent);
@@ -34,12 +36,12 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    player1.prepareToPlay(samplesPerBlockExpected, sampleRate);
-    player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    playerL.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    playerR.prepareToPlay(samplesPerBlockExpected, sampleRate);
     
     mixerSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
-    mixerSource.addInputSource(&player1, false);
-    mixerSource.addInputSource(&player2, false);
+    mixerSource.addInputSource(&playerL, false);
+    mixerSource.addInputSource(&playerR, false);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -49,8 +51,8 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 
 void MainComponent::releaseResources()
 {
-    player1.releaseResources();
-    player2.releaseResources();
+    playerL.releaseResources();
+    playerR.releaseResources();
     mixerSource.releaseResources();
 }
 
@@ -64,10 +66,13 @@ void MainComponent::paint (juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    deckGUI1.setBounds(0,0,getWidth()/2,getHeight()/2);
-    deckGUI2.setBounds(getWidth()/2,0,getWidth()/2,getHeight()/2);
+    double rowH=getHeight()/9;
+    waveformL.setBounds(0, 0,getWidth(),rowH);
+    waveformR.setBounds(0, rowH,getWidth(),rowH);
+    deckGUI1.setBounds(0,rowH*2,getWidth()/2,rowH*3);
+    deckGUI2.setBounds(getWidth()/2,rowH*2,getWidth()/2,rowH*3);
     
-    playlistComponent.setBounds(0,getHeight()/2,getWidth(),getHeight()/2);
+    playlistComponent.setBounds(0,rowH*5,getWidth(),rowH*4);
 }
 
 std::unique_ptr<juce::FileChooser> myChooser;

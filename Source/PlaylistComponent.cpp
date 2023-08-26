@@ -15,7 +15,7 @@
 
 //==============================================================================
 PlaylistComponent::PlaylistComponent(DeckGUI* _leftGui, DeckGUI* _rightGui):
-    leftGui(_leftGui),rightGui(_rightGui),selectedLeftRowIdx(-1),selectedRightRowIdx(-1),freeze(false)
+    leftGui(_leftGui),rightGui(_rightGui)
 {
     addAndMakeVisible(loadButton);
     tableComponent.getHeader().addColumn("", 1, 40);
@@ -35,7 +35,6 @@ PlaylistComponent::~PlaylistComponent()
 void PlaylistComponent::paint (juce::Graphics& g)
 {
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
-
     g.setColour (juce::Colours::grey);
     g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 }
@@ -73,6 +72,7 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
         } else {
             juce::ToggleButton* toggleButton = dynamic_cast<juce::ToggleButton*>(existingComponentToUpdate);
             toggleButton-> setToggleState(rows.at(rowNumber).left(), juce::NotificationType::dontSendNotification);
+            std::cout << "refreshComponentForCell setToggleState: " << toggleButton->getToggleState() << std::endl;
         }
     }
     if(columnId==2){
@@ -102,7 +102,6 @@ juce::Component* PlaylistComponent::refreshComponentForCell (int rowNumber, int 
 
 
 void PlaylistComponent::buttonClicked (juce::Button* button){
-    freeze = true;
     if(button==&loadButton){
         auto fileChooserFlags =juce::FileBrowserComponent::canSelectFiles|juce::FileBrowserComponent::openMode|juce::FileBrowserComponent::canSelectMultipleItems;
             fileChooser.launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
@@ -138,7 +137,7 @@ void PlaylistComponent::buttonClicked (juce::Button* button){
                    
                }
             if (buttonID.startsWith("L") || buttonID.startsWith("R")){
-                std::cout << "LR: isL? =" << std::boolalpha << buttonID.startsWith("L") << std::endl;
+                std::cout << "LR: isL? =" << buttonID.startsWith("L") << std::endl;
                 DeckGUI* gui = buttonID.startsWith("L") ? leftGui : rightGui;
                 int optIdx = buttonID.startsWith("L") ? 0 : 1 ; // 0 is left, 1 is right
                 int rowNumber = buttonID.substring(1).getIntValue();
@@ -149,8 +148,8 @@ void PlaylistComponent::buttonClicked (juce::Button* button){
                 bool currentView = button -> getToggleState();
                 
                 std::cout << "rowNumber -> " << rowNumber << std::endl;
-                std::cout << "currentView -> " << std::boolalpha << currentView << std::endl;
-                std::cout << "currentRowsPreviousStatus -> " << std::boolalpha << currentRowsPreviousStatus << std::endl;
+                std::cout << "currentView -> " <<  currentView << std::endl;
+                std::cout << "currentRowsPreviousStatus -> " << currentRowsPreviousStatus << std::endl;
                 std::cout << "previousSelected -> " << previousSelected << std::endl;
                 if (currentView){
                     for (int i = 0; i < rows.size(); ++i) rows.at(i).options[optIdx] = i == rowNumber;

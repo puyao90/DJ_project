@@ -586,6 +586,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\DoubleWaveform.cpp">
+      <Filter>AAA\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PlaylistComponent.cpp">
       <Filter>AAA\Source</Filter>
     </ClCompile>
@@ -3003,6 +3006,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\DoubleWaveform.h">
+      <Filter>AAA\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\RowComponent.h">
       <Filter>AAA\Source</Filter>
     </ClInclude>

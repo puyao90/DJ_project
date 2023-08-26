@@ -4,6 +4,7 @@
 #include "DJAudioPlayer.h"
 #include "DeckGUI.h"
 #include "PlaylistComponent.h"
+#include "DoubleWaveform.h"
 
 //==============================================================================
 /*
@@ -30,10 +31,16 @@ private:
     juce::AudioFormatManager formatManager;
     juce::AudioThumbnailCache thumbCache{100};
     
-    DJAudioPlayer player1{formatManager};
-    DJAudioPlayer player2{formatManager};
-    DeckGUI deckGUI1{&player1,formatManager,thumbCache};
-    DeckGUI deckGUI2{&player2,formatManager,thumbCache};
+
+    DJAudioPlayer playerL{formatManager};
+    DJAudioPlayer playerR{formatManager};
+    
+    DoubleWaveform waveformL{&playerL,formatManager,thumbCache};
+    DoubleWaveform waveformR{&playerR,formatManager,thumbCache};
+    
+    DeckGUI deckGUI1{&playerL,formatManager,thumbCache,&waveformL};
+    DeckGUI deckGUI2{&playerR,formatManager,thumbCache,&waveformR};
+    
     
     juce::MixerAudioSource mixerSource;
     

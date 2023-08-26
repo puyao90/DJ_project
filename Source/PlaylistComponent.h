@@ -39,9 +39,6 @@ private:
     std::vector<RowComponent> rows;
     DeckGUI* leftGui;
     DeckGUI* rightGui;
-    int selectedLeftRowIdx;
-    int selectedRightRowIdx;
-    bool freeze;
     juce::FileChooser fileChooser{"Select a file..."};
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PlaylistComponent)
