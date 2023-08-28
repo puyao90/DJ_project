@@ -138,24 +138,38 @@ void PlaylistComponent::buttonClicked (juce::Button* button){
                }
             if (buttonID.startsWith("L") || buttonID.startsWith("R")){
                 std::cout << "LR: isL? =" << buttonID.startsWith("L") << std::endl;
+                
+                // Determine which DeckGUI to interact with based on the button clicked
                 DeckGUI* gui = buttonID.startsWith("L") ? leftGui : rightGui;
-                int optIdx = buttonID.startsWith("L") ? 0 : 1 ; // 0 is left, 1 is right
+                //Identify the option index: 0 for left, 1 for right
+                int optIdx = buttonID.startsWith("L") ? 0 : 1 ;
+                // Extract the row number from the button ID
                 int rowNumber = buttonID.substring(1).getIntValue();
+                // Retrieve the current status of the option for the clicked row
                 bool currentRowsPreviousStatus = rows.at(rowNumber).options[optIdx];
+                
+                // Find the row that was previously selected for the same option
                 int previousSelected = -1;
                 for (int i = 0; i < rows.size(); ++i) if(rows.at(i).options[optIdx]) previousSelected = i;
                 
+                // Get the current toggle state of the button
                 bool currentView = button -> getToggleState();
                 
+                // Debug print statements for troubleshooting
                 std::cout << "rowNumber -> " << rowNumber << std::endl;
                 std::cout << "currentView -> " <<  currentView << std::endl;
                 std::cout << "currentRowsPreviousStatus -> " << currentRowsPreviousStatus << std::endl;
                 std::cout << "previousSelected -> " << previousSelected << std::endl;
-                if (currentView){
+                
+                if (currentView){// Handle button clicks
+                    // Toggle the option for the clicked row
                     for (int i = 0; i < rows.size(); ++i) rows.at(i).options[optIdx] = i == rowNumber;
+                    
+                    // Clear the waveform display and load the selected file into the DeckGUI
                     gui -> clearWaveDisplay();
                     gui -> addToMyGui(rows.at(rowNumber).file);
                 } else {
+                    // Toggle off the option for all rows, clear waveform display
                     for (int i = 0; i < rows.size(); ++i) rows.at(i).options[optIdx] = false;
                     gui -> clearWaveDisplay();
                 }

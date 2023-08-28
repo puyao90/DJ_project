@@ -41,7 +41,7 @@ public:
     
     bool isInterestedInFileDrag(const juce::StringArray &files) override;
     void filesDropped(const juce::StringArray &files, int x, int y) override;
-    void loadToMyGui();
+//    void loadToMyGui();
     void addToMyGui(juce::File chosenFile);
     void timerCallback() override;
     void clearWaveDisplay();

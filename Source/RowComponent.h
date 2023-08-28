@@ -12,11 +12,18 @@
 
 #include <JuceHeader.h>
 
+/*
+ This struct represents a row of data for the tableComponent in PlaylistComponent.
+
+ The RowComponent struct stores information about a row, including the options
+ for left and right, title, and file associated with the row.
+ */
+
 struct RowComponent
 {
-    bool options[2]; // Index 0: left, Index 1: right
-    juce::String title;
-    juce::File file;
+    bool options[2]; // An array to store left and right options. Index 0: left, Index 1: right
+    juce::String title; //The title associated with the row.
+    juce::File file; //The file associated with the row.
     
     RowComponent(bool left, bool right, const std::string& title, const juce::File& file)
         : title(title), file(file)
@@ -26,7 +33,7 @@ struct RowComponent
     }
     
     
-    bool left() const
+    bool left() const //Get the left option for the row.
     {
         return options[0];
     }
@@ -36,7 +43,7 @@ struct RowComponent
         return options[0];
     }
     
-    bool right() const
+    bool right() const //Get the right option for the row.
     {
         return options[1];
     }
